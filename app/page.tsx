@@ -94,7 +94,7 @@ export default function Home() {
         for (let i = 0; i < results.gestures.length; i++) {
           const categoryName = results.gestures[i][0].categoryName;
           const categoryScore = results.gestures[i][0].score;
-          if (categoryName === "Victory" && categoryScore > 0.6) {
+          if (categoryName === "Victory" && categoryScore > 0.55) {
             peaceSignDetected = true;
           }
         }
@@ -157,28 +157,13 @@ export default function Home() {
               <video
                 ref={videoRef}
                 onLoadedData={predictWebcam}
-                className={`w-full h-full object-cover transition-all duration-300 ${
-                  isBlur ? "blur-2xl scale-110 opacity-80" : "blur-0 scale-100 opacity-100"
+                className={`w-full h-full object-cover transition-all duration-150 ease-out ${
+                  isBlur ? "blur-md scale-105 opacity-90" : "blur-0 scale-100 opacity-100"
                 }`}
                 style={{ transform: "scaleX(-1)" }}
                 playsInline
                 muted
               />
-
-              {/* Blur Effect Overlay */}
-              {isBlur && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center z-10 transition-opacity duration-300 pointer-events-none p-4">
-                  <div className="w-[90%] max-w-sm aspect-square md:aspect-auto md:h-[60%] rounded-2xl bg-zinc-700/50 backdrop-blur-3xl border border-white/5 flex flex-col items-center justify-center text-center p-6">
-                     <div className="mb-4 text-6xl md:text-8xl opacity-80 filter drop-shadow-[0_0_20px_rgba(0,240,255,0.4)]">✌️</div>
-                     <div className="bg-[#00F0FF] text-black px-4 py-1.5 font-black text-[10px] md:text-sm uppercase tracking-widest whitespace-nowrap">
-                       Gesture Detected
-                     </div>
-                     <div className="mt-4 text-[8px] md:text-xs opacity-50 uppercase font-mono tracking-widest">
-                       Applying Gaussian Blur
-                     </div>
-                  </div>
-                </div>
-              )}
 
               {/* Viewfinder Brackets */}
               <div className="absolute top-4 left-4 md:top-10 md:left-10 w-6 h-6 md:w-8 md:h-8 border-t-2 border-l-2 border-[#00F0FF] z-10"></div>
