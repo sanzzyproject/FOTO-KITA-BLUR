@@ -15,6 +15,23 @@ export default function Home() {
   useEffect(() => {
     let isMounted = true;
 
+    const startCamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" },
+        });
+        if (isMounted && videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play();
+        }
+      } catch (err: any) {
+        if (isMounted) {
+          console.error("Error accessing camera", err);
+          setError("Izinkan akses kamera (webcam) untuk menggunakan fitur ini.");
+        }
+      }
+    };
+
     const initializeGestureRecognizer = async () => {
       try {
         const vision = await FilesetResolver.forVisionTasks(
@@ -37,7 +54,6 @@ export default function Home() {
 
         recognizerRef.current = recognizer;
         setIsLoaded(true);
-        startCamera();
       } catch (err: any) {
         if (isMounted) {
           console.error("Error initializing gesture recognizer", err);
@@ -46,6 +62,7 @@ export default function Home() {
       }
     };
 
+    startCamera();
     if (!recognizerRef.current) {
       initializeGestureRecognizer();
     }
@@ -66,21 +83,6 @@ export default function Home() {
       }
     };
   }, []);
-
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" },
-      });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-      }
-    } catch (err: any) {
-      console.error("Error accessing camera", err);
-      setError("Izinkan akses kamera (webcam) untuk menggunakan fitur ini.");
-    }
-  };
 
   const predictWebcam = () => {
     const video = videoRef.current;
